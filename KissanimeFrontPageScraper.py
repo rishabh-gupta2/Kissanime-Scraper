@@ -2,7 +2,7 @@
 import cfscrape
 from bs4 import BeautifulSoup as soup
 
-URL = 'https://kissanime.ac/kissanime.html'
+URL = 'http://kissanime.ac/kissanime.html'
 # Bypassing CloudFare DDos Protection using 3rd party module called 'cfscrape'
 scraper = cfscrape.create_scraper()
 pageHTML = scraper.get(URL).content
@@ -17,13 +17,13 @@ containers = pageSoup.findAll('div',{'class':'item_film_list'})
 fileName = 'KissanimeFrontPage.csv'
 
 # Using utf8 encoding due to compatibility issue in Windows
-f = open(fileName,'w',encoding = 'utf8')
+f = open(fileName,'wr+',encoding = 'utf8')
 
 # Defining headers of csv file
-headers = 'Title, Link, ThumbnailLink, Genre\n'
+headers = 'Title, Link, ThumbnailLink, Genre'
 
 # Writing headers
-f.write(headers)
+f.write(headers + '\n')
 
 # Running loop for each container
 for container in containers:
@@ -49,12 +49,6 @@ for container in containers:
     # Genre
     genresSplit = container.p.text.split('\n')
     genres = genresSplit[2]
-
-    print('title: ' + title)
-    print('vidLink: ' + vidLink)
-    print('thumbUrl: ' + thumbUrl)
-    print('genres: ' + genres)
-    print('\n\n')
 
     # Writing extrated values in csv file
     f.write(title + ',' + vidLink + ',' + thumbUrl + ',' + genres.replace(',' , '|') + '\n')
